@@ -1,0 +1,12 @@
+plugins {
+	id 'java'
+}
+
+repositories {
+}
+
+dependencies {
+	implementation project(':cel-api')
+	implementation project(':cel-bukkit-api')
+	implementation project(':cel-bukkit-v1_20_R1')
+}

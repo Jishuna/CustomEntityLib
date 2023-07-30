@@ -1,0 +1,19 @@
+plugins {
+	id 'java-library'
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    api("org.joml:joml:1.10.5")
+    api("com.google.guava:guava:32.1.1-jre")
+    implementation("team.unnamed:creative-api:0.5.4-SNAPSHOT")
+    implementation("team.unnamed:creative-server:0.5.4-SNAPSHOT")
+}

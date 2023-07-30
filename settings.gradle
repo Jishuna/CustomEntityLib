@@ -1,0 +1,18 @@
+rootProject.name = 'customentitylib'
+gradle.rootProject {
+    it.version = '1.0.0'
+    it.group = 'me.jishuna'
+}
+
+subproject('api')
+subproject('bukkit')
+subproject('bukkit:api')
+subproject('bukkit:v1_20_R1')
+
+def subproject(String name) {
+    String projectName = "cel-" + name.replace(':', '-')
+    String path = "cel-" + name.replace(':', '/')
+    
+    include(projectName)
+    project(":${projectName}").projectDir = file(path)
+}

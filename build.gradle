@@ -1,0 +1,8 @@
+plugins {
+	id 'eclipse'
+	id 'java'
+    id 'maven-publish'
+}
+
+repositories {
+}
