@@ -1,12 +1,46 @@
 plugins {
 	id 'java'
+    id 'maven-publish'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+jar.enabled = false
+group 'me.jishuna'
+version '1.0.0'
+
 repositories {
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
 	implementation project(':cel-api')
 	implementation project(':cel-bukkit-api')
-	implementation project(':cel-bukkit-v1_20_R1')
+	implementation project(path: ':cel-bukkit-v1_20_R1', configuration: 'reobf')
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
+
+build {
+    dependsOn shadowJar
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+            repositories {
+                maven {
+                    credentials {
+                        username = 'josh'
+                        password = System.getenv("Secret")
+                    }
+                    url = 'https://repo.epicebic.xyz/public/'
+                }
+            }
+        }
+    }
 }

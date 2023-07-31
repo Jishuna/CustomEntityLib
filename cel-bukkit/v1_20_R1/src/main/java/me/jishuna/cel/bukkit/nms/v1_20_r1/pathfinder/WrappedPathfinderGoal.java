@@ -1,6 +1,6 @@
 package me.jishuna.cel.bukkit.nms.v1_20_r1.pathfinder;
 
-import me.jishuna.cel.bukkit.PathfinderGoal;
+import me.jishuna.cel.bukkit.entity.pathfinder.PathfinderGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class WrappedPathfinderGoal extends Goal {

@@ -1,7 +1,7 @@
 package me.jishuna.cel.bukkit.nms.v1_20_r1.pathfinder;
 
-import me.jishuna.cel.bukkit.PathfinderGoal;
-import me.jishuna.cel.bukkit.nms.v1_20_r1.MinecraftCustomEntity;
+import me.jishuna.cel.bukkit.entity.pathfinder.PathfinderGoal;
+import me.jishuna.cel.bukkit.nms.v1_20_r1.entity.MinecraftCustomEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 

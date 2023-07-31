@@ -1,4 +1,4 @@
-package me.jishuna.cel.bukkit;
+package me.jishuna.cel.bukkit.entity.pathfinder;
 
 public interface PathfinderGoal {
 

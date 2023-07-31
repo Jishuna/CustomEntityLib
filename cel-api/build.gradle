@@ -12,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    api("org.joml:joml:1.10.5")
-    api("com.google.guava:guava:32.1.1-jre")
-    implementation("team.unnamed:creative-api:0.5.4-SNAPSHOT")
-    implementation("team.unnamed:creative-server:0.5.4-SNAPSHOT")
+    compileOnly("org.joml:joml:1.10.5")
+    compileOnly("com.google.guava:guava:32.1.1-jre")
+    compileOnly("team.unnamed:creative-api:0.5.4-SNAPSHOT")
+    compileOnly("team.unnamed:creative-server:0.5.4-SNAPSHOT")
 }

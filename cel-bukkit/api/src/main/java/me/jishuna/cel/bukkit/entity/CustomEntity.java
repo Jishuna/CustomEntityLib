@@ -1,4 +1,4 @@
-package me.jishuna.cel.bukkit;
+package me.jishuna.cel.bukkit.entity;
 
 public class CustomEntity {
     private final BukkitCustomEntity bukkitEntity;
