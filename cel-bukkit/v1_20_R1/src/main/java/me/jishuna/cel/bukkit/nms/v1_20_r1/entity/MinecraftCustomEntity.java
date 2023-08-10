@@ -10,8 +10,8 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 
 public class MinecraftCustomEntity extends PathfinderMob {
-    private CraftCustomEntity craftEntity;
-    private CustomEntity customEntity;
+    private final CraftCustomEntity craftEntity;
+    private final CustomEntity customEntity;
     private AttributeMap attributes;
 
     public MinecraftCustomEntity(EntityType<? extends PathfinderMob> type, Level world) {

@@ -1,6 +1,7 @@
 package me.jishuna.cel.bukkit.nms;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import me.jishuna.cel.bukkit.entity.CustomEntityType;
 
@@ -23,9 +24,9 @@ public abstract class NMSAdapter {
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].toLowerCase();
     }
     
-    public abstract void onLoad();
+    public abstract void onLoad(Plugin plugin);
     
-    public abstract void onEnable();
+    public abstract void onEnable(Plugin plugin);
     
     public abstract void registerInternalEntityType(CustomEntityType type);
 

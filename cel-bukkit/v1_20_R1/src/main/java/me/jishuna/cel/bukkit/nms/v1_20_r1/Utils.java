@@ -27,11 +27,20 @@ public class Utils {
         return CustomEntityLib.getEntityTypeRegistry().get(key);
     }
 
+    public static int getTypeId(org.bukkit.entity.EntityType type) {
+        if (type == org.bukkit.entity.EntityType.UNKNOWN) {
+            return -1;
+        }
+        NamespacedKey key = type.getKey();
+        EntityType<?> nmsType = BuiltInRegistries.ENTITY_TYPE.get(CraftNamespacedKey.toMinecraft(key));
+        return BuiltInRegistries.ENTITY_TYPE.getId(nmsType);
+    }
+
     public static MinecraftCustomEntity toMinecraft(CustomEntity entity) {
         CraftCustomEntity craftEntity = (CraftCustomEntity) entity.asBukkitEntity();
         return craftEntity.getHandle();
     }
-    
+
     public static Field getField(Class<?> clazz, Class<?> type, int index) {
         int i = 0;
         for (Field field : clazz.getDeclaredFields()) {
