@@ -17,6 +17,22 @@ public class Cube {
         this.faces = faces;
     }
 
+    public Vector3f getFrom() {
+        return new Vector3f(this.from);
+    }
+
+    public Vector3f getTo() {
+        return new Vector3f(this.to);
+    }
+
+    public CubeRotation getRotation() {
+        return this.rotation;
+    }
+
+    public Map<Face, CubeFace> getFaces() {
+        return this.faces;
+    }
+
     public JsonObject asJsonObject() {
         JsonObject root = new JsonObject();
         root.add("from", BBModelParser.GSON.toJsonTree(new float[] { this.from.x, this.from.y, this.from.z }));

@@ -14,6 +14,18 @@ public class CubeRotation {
         this.angle = angle;
     }
 
+    public Vector3f getPivot() {
+        return this.pivot;
+    }
+
+    public Axis getAxis() {
+        return this.axis;
+    }
+
+    public float getAngle() {
+        return this.angle;
+    }
+
     public JsonObject asJsonObject() {
         JsonObject root = new JsonObject();
         root.addProperty("angle", this.angle);

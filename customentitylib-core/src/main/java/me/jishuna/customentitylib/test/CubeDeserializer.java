@@ -22,9 +22,32 @@ public class CubeDeserializer implements JsonDeserializer<Cube> {
         Vector3f to = new Vector3f((float[]) context.deserialize(json.get("to"), float[].class));
         Vector3f pivot = new Vector3f((float[]) context.deserialize(json.get("origin"), float[].class));
 
-        CubeRotation rotation = new CubeRotation(pivot, Axis.Y, 0);
+        Vector3f rotation = new Vector3f();
+        if (json.has("rotation")) {
+            rotation.set((float[]) context.deserialize(json.get("rotation"), float[].class));
+        }
 
-        return new Cube(from, to, rotation, readFaces(json.getAsJsonObject("faces"), context));
+        float x = rotation.x();
+        float y = rotation.y();
+        float z = rotation.z();
+
+        Axis axis;
+        float angle;
+
+        if (x != 0) {
+            axis = Axis.X;
+            angle = x;
+        } else if (y != 0) {
+            axis = Axis.Y;
+            angle = y;
+        } else {
+            axis = Axis.Z;
+            angle = z;
+        }
+
+        CubeRotation rot = new CubeRotation(pivot, axis, angle);
+
+        return new Cube(from, to, rot, readFaces(json.getAsJsonObject("faces"), context));
     }
 
     private Map<Face, CubeFace> readFaces(JsonObject json, JsonDeserializationContext context) {

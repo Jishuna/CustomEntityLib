@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class BBModelParser {
     public static final Gson GSON = new GsonBuilder()
@@ -52,7 +52,7 @@ public class BBModelParser {
 
         Map<UUID, Bone> bones = new HashMap<>();
         this.root.getAsJsonArray("outliner").forEach(entry -> {
-            readBone(entry.getAsJsonObject(), bones, cubes);
+            readBone(entry.getAsJsonObject(), bones, cubes, new Vector3f());
         });
 
         File file = new File("resource-pack");
@@ -62,15 +62,17 @@ public class BBModelParser {
         return new EntityModel(bones);
     }
 
-    private void readBone(JsonObject json, Map<UUID, Bone> bones, Map<UUID, Cube> cubes) {
+    private void readBone(JsonObject json, Map<UUID, Bone> bones, Map<UUID, Cube> cubes, Vector3f parentTranslation) {
         String name = json.get("name").getAsString();
         UUID id = GSON.fromJson(json.get("uuid"), UUID.class);
-        Matrix4f matrix = buildMatrix(json);
+        Vector3f origin = new Vector3f(GSON.fromJson(json.get("origin"), float[].class));
+        Vector3f absolutePosition = origin.div(-16, 16, -16, new Vector3f());
+        Vector3f position = absolutePosition.sub(parentTranslation.x, 0, 0, new Vector3f());
 
         List<Cube> boneCubes = new ArrayList<>();
         json.getAsJsonArray("children").forEach(child -> {
             if (child.isJsonObject()) {
-                readBone(child.getAsJsonObject(), bones, cubes);
+                readBone(child.getAsJsonObject(), bones, cubes, absolutePosition);
             } else {
                 UUID cubeId = GSON.fromJson(child, UUID.class);
                 Cube cube = cubes.remove(cubeId);
@@ -82,24 +84,13 @@ public class BBModelParser {
             }
         });
 
-        Bone bone = new Bone(name, matrix, boneCubes.toArray(Cube[]::new));
-        bones.put(id, bone);
-    }
+        ElementScale.Result processResult = ElementScale.process(origin, boneCubes);
 
-    private Matrix4f buildMatrix(JsonObject json) {
-        BoneTransformation transformation = new BoneTransformation();
-
-        if (json.has("origin")) {
-            transformation.translation.set(GSON.fromJson(json.get("origin"), float[].class));
-        }
-
+        BoneTransformation transformation = new BoneTransformation(position, new Vector3f(), new Vector3f(1));
         if (json.has("rotation")) {
-            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class));
+            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(-DEGREES_TO_RADIANS);
         }
-
-        transformation.rotation.mul(DEGREES_TO_RADIANS);
-        transformation.translation.div(-16, 16, -16);
-
-        return transformation.compose();
+        Bone bone = new Bone(name, transformation.compose(), processResult.elements().toArray(Cube[]::new));
+        bones.put(id, bone);
     }
 }
