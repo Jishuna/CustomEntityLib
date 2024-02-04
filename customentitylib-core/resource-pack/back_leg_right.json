@@ -1,0 +1,90 @@
+{
+  "textures": {
+    "0": "test:entity/nocsy_otter_v2"
+  },
+  "elements": [
+    {
+      "from": [
+        -7.2,
+        -8.1,
+        -5.9
+      ],
+      "to": [
+        -4.2,
+        -3.1,
+        -2.9
+      ],
+      "rotation": {
+        "angle": 0.0,
+        "axis": "y",
+        "origin": [
+          -10.2,
+          -11.3,
+          -5.9
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            9.25,
+            4.5,
+            10.0,
+            5.75
+          ],
+          "texture": "#0",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            11.25,
+            10.5,
+            10.5,
+            11.25
+          ],
+          "texture": "#0",
+          "tintindex": 0
+        },
+        "north": {
+          "uv": [
+            9.25,
+            3.0,
+            10.0,
+            4.25
+          ],
+          "texture": "#0",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            9.25,
+            8.25,
+            10.0,
+            9.5
+          ],
+          "texture": "#0",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            9.5,
+            0.0,
+            10.25,
+            1.25
+          ],
+          "texture": "#0",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            10.25,
+            11.25,
+            9.5,
+            10.5
+          ],
+          "texture": "#0",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}
