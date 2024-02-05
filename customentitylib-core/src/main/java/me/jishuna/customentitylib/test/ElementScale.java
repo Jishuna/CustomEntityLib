@@ -25,10 +25,8 @@ package me.jishuna.customentitylib.test;
 
 import java.util.Arrays;
 import java.util.List;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 
-@ApiStatus.Internal
 public class ElementScale {
 
     // Minecraft Models have a maximum size of 48x48x48 pixels, where normally,

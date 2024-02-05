@@ -2,11 +2,8 @@ package me.jishuna.customentitylib;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,35 +32,10 @@ public class CustomEntityLib extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
 
-        new me.jishuna.customentitylib.test.TestModelEntity(player.getLocation(), this.model);
+        me.jishuna.customentitylib.test.TestModelEntity entity = new me.jishuna.customentitylib.test.TestModelEntity(player.getLocation(), this.model);
+        Bukkit.getScheduler().runTaskTimer(this, () -> entity.getAnimator().tick(), 0, 1);
+        Bukkit.getScheduler().runTaskLater(this, () -> entity.getAnimator().setAnimation(entity.getAnimation("walk")), 20 * 5);
+
         return true;
-    }
-
-    private void read(JsonObject json) {
-        Map<UUID, Bone> bones = new HashMap<>();
-        Map<UUID, Pose> defaultPoses = new HashMap<>();
-        Map<String, Animation> animations = new HashMap<>();
-
-        json.getAsJsonObject("rig").getAsJsonObject("node_map").entrySet().forEach(entry -> {
-            Bone bone = GSON.fromJson(entry.getValue(), Bone.class);
-
-            bones.put(bone.getUuid(), bone);
-        });
-
-        json.getAsJsonObject("rig").getAsJsonArray("default_pose").forEach(entry -> {
-            UUID id = GSON.fromJson(entry.getAsJsonObject().get("uuid"), UUID.class);
-            Pose pose = GSON.fromJson(entry, Pose.class);
-
-            defaultPoses.put(id, pose);
-        });
-
-        json.getAsJsonObject("animations").entrySet().forEach(entry -> {
-            String name = entry.getKey();
-            Animation animation = GSON.fromJson(entry.getValue(), Animation.class);
-
-            animations.put(name, animation);
-        });
-
-        // this.model = new EntityModel(bones, defaultPoses, animations);
     }
 }

@@ -22,6 +22,12 @@ public class CubeDeserializer implements JsonDeserializer<Cube> {
         Vector3f to = new Vector3f((float[]) context.deserialize(json.get("to"), float[].class));
         Vector3f pivot = new Vector3f((float[]) context.deserialize(json.get("origin"), float[].class));
 
+        if (json.has("inflate")) {
+            float inflate = json.get("inflate").getAsFloat() / 2;
+            from.sub(inflate, inflate, inflate);
+            to.add(inflate, inflate, inflate);
+        }
+
         Vector3f rotation = new Vector3f();
         if (json.has("rotation")) {
             rotation.set((float[]) context.deserialize(json.get("rotation"), float[].class));

@@ -14,13 +14,6 @@ configurations.all {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
-    implementation (group: 'me.jishuna', name: 'jishlib', version: '2.0.0-SNAPSHOT')
-    bukkitLibrary "net.kyori:adventure-platform-bukkit:4.3.2"
-    bukkitLibrary "net.kyori:adventure-text-minimessage:4.15.0"
-}
-
-shadowJar {
-    relocate 'me.jishuna.jishlib', 'me.jishuna.waystones.libs.jishlib'
 }
 
 bukkit {

@@ -2,31 +2,22 @@ package me.jishuna.customentitylib.test;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.util.Arrays;
-import org.joml.Matrix4f;
+import java.util.UUID;
 
 public class Bone {
 
+    private final UUID id;
     private final String name;
-    private final Matrix4f matrix;
+    private final BoneTransformation transformation;
     private final Cube[] cubes;
+    private final Bone[] children;
 
-    public Bone(String name, Matrix4f matrix, Cube[] cubes) {
+    public Bone(UUID id, String name, BoneTransformation transformation, Cube[] cubes, Bone[] children) {
+        this.id = id;
         this.name = name;
-        this.matrix = matrix;
+        this.transformation = transformation;
         this.cubes = cubes;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Matrix4f getMatrix() {
-        return this.matrix;
-    }
-
-    public Cube[] getCubes() {
-        return this.cubes;
+        this.children = children;
     }
 
     public JsonObject asJsonObject() {
@@ -45,8 +36,23 @@ public class Bone {
         return root;
     }
 
-    @Override
-    public String toString() {
-        return "Bone [name=" + this.name + ", matrix=" + this.matrix + ", cubes=" + Arrays.toString(this.cubes) + "]";
+    public UUID getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public BoneTransformation getTransformation() {
+        return this.transformation;
+    }
+
+    public Cube[] getCubes() {
+        return this.cubes;
+    }
+
+    public Bone[] getChildren() {
+        return this.children;
     }
 }

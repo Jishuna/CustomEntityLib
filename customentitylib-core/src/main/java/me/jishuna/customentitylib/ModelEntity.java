@@ -81,7 +81,7 @@ public abstract class ModelEntity {
             parent.addPassenger(e);
             e.setTeleportDuration(3);
 
-            this.bones.put(id, new BoneEntity(e));
+            // this.bones.put(id, new BoneEntity(e));
         }));
     }
 }
