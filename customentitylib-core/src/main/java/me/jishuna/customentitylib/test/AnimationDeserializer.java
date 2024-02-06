@@ -20,6 +20,7 @@ public class AnimationDeserializer implements JsonDeserializer<Animation> {
     private Animation readAnimation(JsonObject json, JsonDeserializationContext context) {
         Map<UUID, Animator> animators = new HashMap<>();
         int length = Math.round(json.get("length").getAsFloat() * 20);
+        LoopMode loopMode = LoopMode.valueOf(json.get("loop").getAsString().toUpperCase());
 
         json.getAsJsonObject("animators").asMap().forEach((id, value) -> {
             UUID uuid = UUID.fromString(id);
@@ -28,7 +29,7 @@ public class AnimationDeserializer implements JsonDeserializer<Animation> {
             animators.put(uuid, animator);
         });
 
-        return new Animation(length, animators);
+        return new Animation(length, animators, loopMode);
     }
 
 }

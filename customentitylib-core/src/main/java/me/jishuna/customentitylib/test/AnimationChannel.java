@@ -2,7 +2,7 @@ package me.jishuna.customentitylib.test;
 
 import java.util.Arrays;
 import org.joml.Vector3f;
-import me.jishuna.customentitylib.BoneEntity;
+import me.jishuna.customentitylib.nms.BoneEntity;
 
 public class AnimationChannel {
     private final Keyframe[] keyframes;

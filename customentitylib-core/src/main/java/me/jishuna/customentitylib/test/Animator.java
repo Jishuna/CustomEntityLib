@@ -1,6 +1,6 @@
 package me.jishuna.customentitylib.test;
 
-import me.jishuna.customentitylib.BoneEntity;
+import me.jishuna.customentitylib.nms.BoneEntity;
 
 public class Animator {
     private final AnimationChannel position;

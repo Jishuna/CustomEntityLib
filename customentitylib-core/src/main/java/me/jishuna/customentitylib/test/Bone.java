@@ -33,6 +33,16 @@ public class Bone {
         }
 
         root.add("elements", elements);
+        JsonObject display = new JsonObject();
+        JsonObject head = new JsonObject();
+        JsonArray rotation = new JsonArray();
+        rotation.add(0);
+        rotation.add(180);
+        rotation.add(0);
+        head.add("rotation", rotation);
+        display.add("head", head);
+        root.add("display", display);
+
         return root;
     }
 

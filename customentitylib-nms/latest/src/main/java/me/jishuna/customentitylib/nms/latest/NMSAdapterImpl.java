@@ -1,31 +1,22 @@
 package me.jishuna.customentitylib.nms.latest;
 
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
-import me.jishuna.customentitylib.ModelEntity;
+import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMSAdapter;
+import me.jishuna.customentitylib.test.BoneTransformation;
+import me.jishuna.customentitylib.test.ModelEntity;
 
 public class NMSAdapterImpl implements NMSAdapter {
-    private static SynchedEntityData data;
 
     @Override
     public Entity spawnCustomEntity(Location location, ModelEntity modelEntity) {
         ServerLevel level = ((CraftWorld) location.getWorld()).getHandle();
 
-        if (data == null) {
-            ArmorStand stand = EntityType.ARMOR_STAND.create(level);
-            stand.setInvisible(true);
-            stand.setMarker(true);
-
-            data = stand.getEntityData();
-        }
-
-        CustomEntity entity = new CustomEntity(level, data, modelEntity);
+        CustomEntity entity = new CustomEntity(level, modelEntity);
         entity.setPos(location.getX(), location.getY(), location.getZ());
         HtiboxEntity hitbox = entity.getHitboxEntity();
         hitbox.setPos(location.getX(), location.getY(), location.getZ());
@@ -34,6 +25,18 @@ public class NMSAdapterImpl implements NMSAdapter {
         level.addFreshEntity(hitbox);
         hitbox.startRiding(entity);
 
-        return hitbox.getBukkitEntity();
+        return entity.getBukkitEntity();
+    }
+
+    @Override
+    public BoneEntity spawnBoneEntity(Entity parent, Location location, BoneTransformation defaultTransformation, BoneEntity parentBone, boolean headBone) {
+        ServerLevel level = ((CraftWorld) location.getWorld()).getHandle();
+        net.minecraft.world.entity.Entity internal = ((CraftEntity) parent).getHandle();
+
+        InternalBoneEntity boneEntity = new InternalBoneEntity(internal, defaultTransformation, parentBone, headBone);
+        boneEntity.setPos(location.getX(), location.getY(), location.getZ());
+        level.addFreshEntity(boneEntity);
+
+        return boneEntity;
     }
 }
