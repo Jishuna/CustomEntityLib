@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.resourcepack;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import me.jishuna.customentitylib.model.BBModelParser;
+import me.jishuna.customentitylib.model.Bone;
+import me.jishuna.customentitylib.model.EntityModel;
 
 public class ResourcePackBuilder {
     private final File root;

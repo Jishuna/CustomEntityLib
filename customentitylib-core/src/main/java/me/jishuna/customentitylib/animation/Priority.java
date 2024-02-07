@@ -1,11 +1,15 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.animation;
 
 public enum Priority {
     LOWEST(0), LOW(1), NORMAL(2), HIGH(3), HIGHEST(4);
 
-    protected final int value;
+    private final int value;
 
     private Priority(int value) {
         this.value = value;
+    }
+
+    public int getValue() {
+        return this.value;
     }
 }

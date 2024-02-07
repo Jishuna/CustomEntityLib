@@ -22,8 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.joml.Vector3f;
-import me.jishuna.customentitylib.test.ModelEntity;
-import me.jishuna.customentitylib.test.Priority;
+import me.jishuna.customentitylib.animation.Priority;
+import me.jishuna.customentitylib.entity.ModelEntity;
 
 public class CustomEntity extends PathfinderMob {
     private final HtiboxEntity hitbox;

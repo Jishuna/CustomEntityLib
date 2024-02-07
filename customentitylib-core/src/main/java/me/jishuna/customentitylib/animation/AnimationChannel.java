@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.animation;
 
 import java.util.Arrays;
 import org.joml.Vector3f;

@@ -6,12 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import me.jishuna.customentitylib.entity.TestModelEntity;
+import me.jishuna.customentitylib.model.BBModelParser;
+import me.jishuna.customentitylib.model.EntityModel;
+import me.jishuna.customentitylib.model.ModelManager;
 import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMS;
-import me.jishuna.customentitylib.test.BBModelParser;
-import me.jishuna.customentitylib.test.EntityModel;
-import me.jishuna.customentitylib.test.ModelManager;
-import me.jishuna.customentitylib.test.TestModelEntity;
 
 public class CustomEntityLib extends JavaPlugin {
     private ModelManager manager = new ModelManager();

@@ -1,6 +1,9 @@
 package me.jishuna.customentitylib.test;
 
 import java.io.File;
+import me.jishuna.customentitylib.model.BBModelParser;
+import me.jishuna.customentitylib.model.EntityModel;
+import me.jishuna.customentitylib.resourcepack.ResourcePackBuilder;
 
 public class Test {
 

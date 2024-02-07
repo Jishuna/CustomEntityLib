@@ -1,7 +1,11 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.entity;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import me.jishuna.customentitylib.animation.Animation;
+import me.jishuna.customentitylib.animation.AnimationEntry;
+import me.jishuna.customentitylib.animation.LoopMode;
+import me.jishuna.customentitylib.animation.Priority;
 
 public class EntityAnimator {
     private final ModelEntity entity;
@@ -23,7 +27,7 @@ public class EntityAnimator {
 
         this.frame++;
         if (this.frame > active.getLength()) {
-            if (!this.animationQueue.isEmpty() && this.animationQueue.peek().priority().value >= this.currentAnimation.priority().value) {
+            if (!this.animationQueue.isEmpty() && this.animationQueue.peek().priority().getValue() >= this.currentAnimation.priority().getValue()) {
                 clearActiveAnimation();
             } else if (active.getLoopMode() == LoopMode.LOOP) {
                 queueAnimation(this.currentAnimation);

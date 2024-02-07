@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -9,6 +9,11 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import org.joml.Vector3f;
+import me.jishuna.customentitylib.model.Axis;
+import me.jishuna.customentitylib.model.Cube;
+import me.jishuna.customentitylib.model.CubeFace;
+import me.jishuna.customentitylib.model.CubeRotation;
+import me.jishuna.customentitylib.model.Face;
 
 public class CubeDeserializer implements JsonDeserializer<Cube> {
 

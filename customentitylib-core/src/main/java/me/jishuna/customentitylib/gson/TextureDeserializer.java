@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.Base64;
+import me.jishuna.customentitylib.resourcepack.Texture;
 
 public class TextureDeserializer implements JsonDeserializer<Texture> {
     private static final String BASE_64_PREFIX = "data:image/png;base64,";

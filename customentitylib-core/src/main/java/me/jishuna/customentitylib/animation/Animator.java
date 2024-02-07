@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.animation;
 
 import me.jishuna.customentitylib.nms.BoneEntity;
 

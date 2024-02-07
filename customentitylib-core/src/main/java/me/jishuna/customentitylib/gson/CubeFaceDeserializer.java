@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import org.joml.Vector4f;
+import me.jishuna.customentitylib.model.CubeFace;
 
 public class CubeFaceDeserializer implements JsonDeserializer<CubeFace> {
 

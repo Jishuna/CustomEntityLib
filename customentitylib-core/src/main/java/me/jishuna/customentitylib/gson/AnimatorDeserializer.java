@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.joml.Vector3f;
+import me.jishuna.customentitylib.animation.AnimationChannel;
+import me.jishuna.customentitylib.animation.Animator;
+import me.jishuna.customentitylib.animation.Keyframe;
+import me.jishuna.customentitylib.model.BBModelParser;
 
 public class AnimatorDeserializer implements JsonDeserializer<Animator> {
 

@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.model;
 
 import com.google.gson.JsonObject;
 import java.util.Map;

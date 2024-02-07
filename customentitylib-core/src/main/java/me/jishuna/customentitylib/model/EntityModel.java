@@ -1,7 +1,9 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.model;
 
 import java.util.Map;
 import java.util.UUID;
+import me.jishuna.customentitylib.animation.Animation;
+import me.jishuna.customentitylib.resourcepack.Texture;
 
 public class EntityModel {
     private final String name;

@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,6 +16,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.joml.Vector3f;
+import me.jishuna.customentitylib.animation.Animation;
+import me.jishuna.customentitylib.animation.Animator;
+import me.jishuna.customentitylib.gson.AnimationDeserializer;
+import me.jishuna.customentitylib.gson.AnimatorDeserializer;
+import me.jishuna.customentitylib.gson.CubeDeserializer;
+import me.jishuna.customentitylib.gson.CubeFaceDeserializer;
+import me.jishuna.customentitylib.gson.TextureDeserializer;
+import me.jishuna.customentitylib.resourcepack.Texture;
+import me.jishuna.customentitylib.test.BoneTransformation;
 
 public class BBModelParser {
     public static final Gson GSON = new GsonBuilder()

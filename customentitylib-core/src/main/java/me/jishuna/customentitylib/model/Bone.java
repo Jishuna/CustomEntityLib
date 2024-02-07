@@ -1,9 +1,10 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.Collection;
 import java.util.UUID;
+import me.jishuna.customentitylib.test.BoneTransformation;
 
 public class Bone {
 

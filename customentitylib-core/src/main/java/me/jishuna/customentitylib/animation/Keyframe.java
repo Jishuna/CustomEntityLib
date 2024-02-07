@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.animation;
 
 import org.joml.Vector3f;
 

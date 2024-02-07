@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,10 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import me.jishuna.customentitylib.animation.Animation;
+import me.jishuna.customentitylib.animation.Priority;
+import me.jishuna.customentitylib.model.Bone;
+import me.jishuna.customentitylib.model.EntityModel;
 import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMS;
 

@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -9,6 +9,10 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import me.jishuna.customentitylib.animation.Animation;
+import me.jishuna.customentitylib.animation.Animator;
+import me.jishuna.customentitylib.animation.LoopMode;
+import me.jishuna.customentitylib.model.BBModelParser;
 
 public class AnimationDeserializer implements JsonDeserializer<Animation> {
 

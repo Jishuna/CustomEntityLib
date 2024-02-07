@@ -1,8 +1,9 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib.model;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import me.jishuna.customentitylib.resourcepack.ResourcePackBuilder;
 
 public class ModelManager {
     private final Map<String, EntityModel> models = new HashMap<>();
