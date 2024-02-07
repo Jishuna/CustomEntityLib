@@ -8,7 +8,10 @@ public class Test {
         File file = new File("otter.bbmodel");
         System.out.println(file.getAbsolutePath());
         BBModelParser parser = BBModelParser.fromFile(file);
-        parser.parse();
-    }
+        EntityModel model = parser.parse();
 
+        File rpFile = new File("resource-pack");
+        ResourcePackBuilder builder = new ResourcePackBuilder(rpFile, "test");
+        builder.writeModel(model);
+    }
 }

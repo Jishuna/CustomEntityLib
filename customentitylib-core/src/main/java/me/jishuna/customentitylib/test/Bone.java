@@ -2,6 +2,7 @@ package me.jishuna.customentitylib.test;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.util.Collection;
 import java.util.UUID;
 
 public class Bone {
@@ -11,19 +12,24 @@ public class Bone {
     private final BoneTransformation transformation;
     private final Cube[] cubes;
     private final Bone[] children;
+    private final int customModelData;
 
-    public Bone(UUID id, String name, BoneTransformation transformation, Cube[] cubes, Bone[] children) {
+    public Bone(UUID id, String name, BoneTransformation transformation, Cube[] cubes, Bone[] children, int customModelData) {
         this.id = id;
         this.name = name;
         this.transformation = transformation;
         this.cubes = cubes;
         this.children = children;
+        this.customModelData = customModelData;
     }
 
-    public JsonObject asJsonObject() {
+    public JsonObject asJsonObject(Collection<String> textureNames) {
         JsonObject root = new JsonObject();
         JsonObject textures = new JsonObject();
-        textures.addProperty("0", "test:entity/nocsy_otter_v2");
+        int textureId = 0;
+        for (String texture : textureNames) {
+            textures.addProperty(Integer.toString(textureId++), "test:models/" + texture.replace(".png", ""));
+        }
         root.add("textures", textures);
 
         JsonArray elements = new JsonArray();
@@ -54,5 +60,9 @@ public class Bone {
 
     public Bone[] getChildren() {
         return this.children;
+    }
+
+    public int getCustomModelData() {
+        return this.customModelData;
     }
 }

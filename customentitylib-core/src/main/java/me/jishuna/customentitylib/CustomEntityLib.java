@@ -10,25 +10,37 @@ import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMS;
 import me.jishuna.customentitylib.test.BBModelParser;
 import me.jishuna.customentitylib.test.EntityModel;
+import me.jishuna.customentitylib.test.ModelManager;
 import me.jishuna.customentitylib.test.TestModelEntity;
 
 public class CustomEntityLib extends JavaPlugin {
-    private EntityModel model;
+    private ModelManager manager = new ModelManager();
 
     @Override
     public void onEnable() {
         NMS.initialize(this);
 
-        File file = new File(getDataFolder(), "creeper.bbmodel");
+        for (File file : getDataFolder().listFiles()) {
+            if (file.isFile() && file.getName().endsWith(".bbmodel")) {
+                EntityModel model = BBModelParser.fromFile(file).parse();
+                this.manager.registerModel(model);
+            }
+        }
 
-        this.model = BBModelParser.fromFile(file).parse();
+        this.manager.generateResourcePack(new File(getDataFolder(), "resource-pack"));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
 
-        TestModelEntity entity = new TestModelEntity(player.getLocation(), this.model);
+        EntityModel model = this.manager.getModel(args[0]);
+        if (model == null) {
+            sender.sendMessage("Invalid model");
+            return true;
+        }
+
+        TestModelEntity entity = new TestModelEntity(player.getLocation(), model);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
             entity.getAnimator().tick();
             entity.getBones().values().forEach(BoneEntity::updateTransformation);

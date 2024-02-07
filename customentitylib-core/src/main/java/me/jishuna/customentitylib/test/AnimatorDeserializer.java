@@ -31,11 +31,11 @@ public class AnimatorDeserializer implements JsonDeserializer<Animator> {
 
             switch (value.getAsJsonObject().get("channel").getAsString()) {
             case "position" -> {
-                keyframe.getValue().div(16, 16, 16);
+                keyframe.getValue().div(-16, 16, -16);
                 positions.add(keyframe);
             }
             case "rotation" -> {
-                keyframe.getValue().mul(BBModelParser.DEGREES_TO_RADIANS);
+                keyframe.getValue().mul(BBModelParser.DEGREES_TO_RADIANS, -BBModelParser.DEGREES_TO_RADIANS, BBModelParser.DEGREES_TO_RADIANS);
                 rotations.add(keyframe);
             }
             case "scale" -> scales.add(keyframe);

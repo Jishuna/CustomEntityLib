@@ -10,11 +10,11 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.joml.Vector3f;
 
 public class BBModelParser {
@@ -24,10 +24,13 @@ public class BBModelParser {
             .registerTypeAdapter(CubeFace.class, new CubeFaceDeserializer())
             .registerTypeAdapter(Animation.class, new AnimationDeserializer())
             .registerTypeAdapter(Animator.class, new AnimatorDeserializer())
+            .registerTypeAdapter(Texture.class, new TextureDeserializer())
             .setPrettyPrinting()
             .create();
 
     public static final float DEGREES_TO_RADIANS = (float) (Math.PI / 180f);
+
+    private static final AtomicInteger MODEL_DATA_COUNTER = new AtomicInteger(2);
 
     private final JsonObject root;
 
@@ -45,9 +48,12 @@ public class BBModelParser {
     }
 
     public EntityModel parse() {
-        Map<UUID, Cube> cubes = new HashMap<>();
+        Map<UUID, Cube> cubes = new LinkedHashMap<>();
         Map<UUID, Bone> bones = new LinkedHashMap<>();
-        Map<String, Animation> animations = new HashMap<>();
+        Map<String, Animation> animations = new LinkedHashMap<>();
+        Map<String, Texture> textures = new LinkedHashMap<>();
+
+        String modelName = this.root.get("name").getAsString();
 
         this.root.getAsJsonArray("elements").forEach(entry -> {
             UUID id = GSON.fromJson(entry.getAsJsonObject().get("uuid"), UUID.class);
@@ -70,25 +76,20 @@ public class BBModelParser {
             });
         }
 
-        File file = new File("resource-pack");
-        ResourcePackBuilder builder = new ResourcePackBuilder(file);
-        bones.values().forEach(bone -> writeBone(builder, bone));
+        this.root.getAsJsonArray("textures").forEach(entry -> {
+            Texture texture = GSON.fromJson(entry, Texture.class);
 
-        return new EntityModel(bones, animations);
-    }
+            textures.put(texture.getId(), texture);
+        });
 
-    private void writeBone(ResourcePackBuilder builder, Bone bone) {
-        builder.writeBone(bone);
-        for (Bone child : bone.getChildren()) {
-            writeBone(builder, child);
-        }
+        return new EntityModel(modelName, bones, animations, textures);
     }
 
     private Bone readBone(JsonObject json, Map<UUID, Cube> cubes, Vector3f parentTranslation) {
         String name = json.get("name").getAsString();
         UUID id = GSON.fromJson(json.get("uuid"), UUID.class);
         Vector3f origin = new Vector3f(GSON.fromJson(json.get("origin"), float[].class));
-        Vector3f absolutePosition = origin.div(16, 16, -16, new Vector3f());
+        Vector3f absolutePosition = origin.div(-16, 16, -16, new Vector3f());
         Vector3f position = absolutePosition.sub(parentTranslation, new Vector3f());
 
         List<Cube> boneCubes = new ArrayList<>();
@@ -110,12 +111,11 @@ public class BBModelParser {
 
         BoneTransformation transformation = new BoneTransformation(position, new Vector3f(), new Vector3f(1));
         if (json.has("rotation")) {
-            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(-DEGREES_TO_RADIANS, DEGREES_TO_RADIANS, DEGREES_TO_RADIANS);
+            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(-DEGREES_TO_RADIANS, DEGREES_TO_RADIANS, -DEGREES_TO_RADIANS);
         }
 
         ElementScale.Result processResult = ElementScale.process(origin, boneCubes);
 
-        Bone bone = new Bone(id, name, transformation, processResult.elements().toArray(Cube[]::new), children.toArray(Bone[]::new));
-        return bone;
+        return new Bone(id, name, transformation, processResult.elements().toArray(Cube[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
     }
 }

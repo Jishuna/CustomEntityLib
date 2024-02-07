@@ -1,0 +1,44 @@
+{
+  "textures": {
+    "layer0": "minecraft:item/leather_horse_armor"
+  },
+  "parent": "item/generated",
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 6
+      },
+      "model": "test:model/body"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "test:model/head"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "test:model/leg0"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "test:model/leg1"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "test:model/leg2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 5
+      },
+      "model": "test:model/leg3"
+    }
+  ]
+}

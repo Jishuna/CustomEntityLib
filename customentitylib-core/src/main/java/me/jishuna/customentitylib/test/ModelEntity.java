@@ -22,7 +22,6 @@ public abstract class ModelEntity {
     private final Map<UUID, BoneEntity> bones = new HashMap<>();
 
     private int damageTicks;
-    private int cmd = 2;
 
     protected ModelEntity(Location location, EntityModel model) {
         this.model = model;
@@ -89,7 +88,7 @@ public abstract class ModelEntity {
 
         ItemStack item = new ItemStack(Material.LEATHER_HORSE_ARMOR);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-        meta.setCustomModelData(this.cmd++);
+        meta.setCustomModelData(bone.getCustomModelData());
         meta.setColor(Color.WHITE);
         item.setItemMeta(meta);
         display.setItemStack(item);
