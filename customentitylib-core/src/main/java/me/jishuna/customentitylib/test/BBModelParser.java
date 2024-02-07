@@ -88,7 +88,7 @@ public class BBModelParser {
         String name = json.get("name").getAsString();
         UUID id = GSON.fromJson(json.get("uuid"), UUID.class);
         Vector3f origin = new Vector3f(GSON.fromJson(json.get("origin"), float[].class));
-        Vector3f absolutePosition = origin.div(16, 16, 16, new Vector3f());
+        Vector3f absolutePosition = origin.div(16, 16, -16, new Vector3f());
         Vector3f position = absolutePosition.sub(parentTranslation, new Vector3f());
 
         List<Cube> boneCubes = new ArrayList<>();
@@ -110,7 +110,7 @@ public class BBModelParser {
 
         BoneTransformation transformation = new BoneTransformation(position, new Vector3f(), new Vector3f(1));
         if (json.has("rotation")) {
-            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(DEGREES_TO_RADIANS);
+            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(-DEGREES_TO_RADIANS, DEGREES_TO_RADIANS, DEGREES_TO_RADIANS);
         }
 
         ElementScale.Result processResult = ElementScale.process(origin, boneCubes);

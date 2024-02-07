@@ -35,7 +35,7 @@ public class AnimatorDeserializer implements JsonDeserializer<Animator> {
                 positions.add(keyframe);
             }
             case "rotation" -> {
-                keyframe.getValue().mul(-BBModelParser.DEGREES_TO_RADIANS, BBModelParser.DEGREES_TO_RADIANS, BBModelParser.DEGREES_TO_RADIANS);
+                keyframe.getValue().mul(BBModelParser.DEGREES_TO_RADIANS);
                 rotations.add(keyframe);
             }
             case "scale" -> scales.add(keyframe);

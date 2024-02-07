@@ -19,7 +19,7 @@ public class CustomEntityLib extends JavaPlugin {
     public void onEnable() {
         NMS.initialize(this);
 
-        File file = new File(getDataFolder(), "otter.bbmodel");
+        File file = new File(getDataFolder(), "creeper.bbmodel");
 
         this.model = BBModelParser.fromFile(file).parse();
     }

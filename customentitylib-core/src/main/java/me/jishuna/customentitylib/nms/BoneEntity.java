@@ -19,5 +19,5 @@ public interface BoneEntity {
 
     Matrix4f getDefaultMatrix();
 
-    Matrix4f getFinalMatrix();
+    Matrix4f getFinalMatrix(boolean head);
 }

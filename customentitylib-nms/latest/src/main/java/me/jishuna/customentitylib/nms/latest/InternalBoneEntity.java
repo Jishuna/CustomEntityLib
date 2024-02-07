@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import me.jishuna.customentitylib.nms.BoneEntity;
+import me.jishuna.customentitylib.test.BBModelParser;
 import me.jishuna.customentitylib.test.BoneTransformation;
 
 public class InternalBoneEntity extends ItemDisplay implements BoneEntity {
@@ -54,7 +55,7 @@ public class InternalBoneEntity extends ItemDisplay implements BoneEntity {
 
     @Override
     public void updateTransformation() {
-        Matrix4f matrix = getFinalMatrix();
+        Matrix4f matrix = getFinalMatrix(this.headBone);
 
         setTransformationInterpolationDelay(0);
         setTransformationInterpolationDuration(3);
@@ -77,15 +78,16 @@ public class InternalBoneEntity extends ItemDisplay implements BoneEntity {
     }
 
     @Override
-    public Matrix4f getFinalMatrix() {
-        Matrix4f matrix = this.defaultTransformation.compose().mul(this.amimTransformation.compose());
+    public Matrix4f getFinalMatrix(boolean head) {
+        Matrix4f matrix = new Matrix4f();
         if (this.parentBone != null) {
-            matrix.mul(this.parentBone.getDefaultMatrix());
+            matrix.mul(this.parentBone.getFinalMatrix(head));
+        } else {
+            matrix.rotateY((head ? this.parent.getYHeadRot() : this.parent.getYRot()) * -BBModelParser.DEGREES_TO_RADIANS);
         }
-        return matrix;
-    }
 
-    private float getYRotation() {
-        return this.headBone ? this.parent.getYHeadRot() : this.parent.getYRot();
+        matrix.mul(this.defaultTransformation.compose());
+        matrix.mul(this.amimTransformation.compose());
+        return matrix;
     }
 }
