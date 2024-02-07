@@ -5,10 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
+import me.jishuna.customentitylib.BoneTransformation;
 import me.jishuna.customentitylib.entity.ModelEntity;
 import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMSAdapter;
-import me.jishuna.customentitylib.test.BoneTransformation;
 
 public class NMSAdapterImpl implements NMSAdapter {
 

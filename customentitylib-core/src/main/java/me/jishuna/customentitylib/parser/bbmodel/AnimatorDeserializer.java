@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.gson;
+package me.jishuna.customentitylib.parser.bbmodel;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -13,7 +13,6 @@ import org.joml.Vector3f;
 import me.jishuna.customentitylib.animation.AnimationChannel;
 import me.jishuna.customentitylib.animation.Animator;
 import me.jishuna.customentitylib.animation.Keyframe;
-import me.jishuna.customentitylib.model.BBModelParser;
 
 public class AnimatorDeserializer implements JsonDeserializer<Animator> {
 
@@ -39,7 +38,7 @@ public class AnimatorDeserializer implements JsonDeserializer<Animator> {
                 positions.add(keyframe);
             }
             case "rotation" -> {
-                keyframe.getValue().mul(BBModelParser.DEGREES_TO_RADIANS, -BBModelParser.DEGREES_TO_RADIANS, BBModelParser.DEGREES_TO_RADIANS);
+                keyframe.getValue().mul(BBModelParser.DEGREES_TO_RADIANS, -BBModelParser.DEGREES_TO_RADIANS, -BBModelParser.DEGREES_TO_RADIANS);
                 rotations.add(keyframe);
             }
             case "scale" -> scales.add(keyframe);

@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.gson;
+package me.jishuna.customentitylib.parser.bbmodel;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -9,10 +9,10 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import me.jishuna.customentitylib.GsonUtil;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.animation.Animator;
 import me.jishuna.customentitylib.animation.LoopMode;
-import me.jishuna.customentitylib.model.BBModelParser;
 
 public class AnimationDeserializer implements JsonDeserializer<Animation> {
 
@@ -28,7 +28,7 @@ public class AnimationDeserializer implements JsonDeserializer<Animation> {
 
         json.getAsJsonObject("animators").asMap().forEach((id, value) -> {
             UUID uuid = UUID.fromString(id);
-            Animator animator = BBModelParser.GSON.fromJson(value, Animator.class);
+            Animator animator = GsonUtil.GSON.fromJson(value, Animator.class);
 
             animators.put(uuid, animator);
         });

@@ -6,9 +6,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import me.jishuna.customentitylib.model.BBModelParser;
+import me.jishuna.customentitylib.BoneTransformation;
 import me.jishuna.customentitylib.nms.BoneEntity;
-import me.jishuna.customentitylib.test.BoneTransformation;
+import me.jishuna.customentitylib.parser.bbmodel.BBModelParser;
 
 public class InternalBoneEntity extends ItemDisplay implements BoneEntity {
     private final Entity parent;

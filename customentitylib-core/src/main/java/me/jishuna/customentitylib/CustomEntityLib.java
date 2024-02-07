@@ -7,11 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import me.jishuna.customentitylib.entity.TestModelEntity;
-import me.jishuna.customentitylib.model.BBModelParser;
 import me.jishuna.customentitylib.model.EntityModel;
 import me.jishuna.customentitylib.model.ModelManager;
 import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMS;
+import me.jishuna.customentitylib.parser.bbmodel.BBModelParser;
 
 public class CustomEntityLib extends JavaPlugin {
     private ModelManager manager = new ModelManager();
@@ -27,7 +27,7 @@ public class CustomEntityLib extends JavaPlugin {
             }
         }
 
-        this.manager.generateResourcePack(new File(getDataFolder(), "resource-pack"));
+        this.manager.generateResourcePack(new File(getDataFolder(), "resource-pack.zip"));
     }
 
     @Override

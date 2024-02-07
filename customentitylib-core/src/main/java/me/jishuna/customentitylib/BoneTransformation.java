@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.test;
+package me.jishuna.customentitylib;
 
 import org.bukkit.util.Transformation;
 import org.joml.Matrix4f;

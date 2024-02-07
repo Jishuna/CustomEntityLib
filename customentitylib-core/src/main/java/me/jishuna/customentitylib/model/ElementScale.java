@@ -26,6 +26,8 @@ package me.jishuna.customentitylib.model;
 import java.util.Arrays;
 import java.util.List;
 import org.joml.Vector3f;
+import me.jishuna.customentitylib.resourcepack.model.ElementRotation;
+import me.jishuna.customentitylib.resourcepack.model.ModelElement;
 
 public class ElementScale {
 
@@ -45,7 +47,7 @@ public class ElementScale {
 
     private static final float MAXIMUM_ABSOLUTE_COORDINATE = 24F;
 
-    public static Result process(Vector3f origin, List<Cube> originalElements) {
+    public static Result process(Vector3f origin, List<ModelElement> originalElements) {
         //
         // The semi length of the model cube. By default, it is 24. the computation
         // of the max coordinate is to check for elements that are outside the default
@@ -58,20 +60,20 @@ public class ElementScale {
         float maxAbsoluteCoordinate = MAXIMUM_ABSOLUTE_COORDINATE;
 
         final int len = originalElements.size();
-        final Cube[] elements = new Cube[len];
+        final ModelElement[] elements = new ModelElement[len];
 
         for (int i = 0; i < len; ++i) {
-            final Cube element = originalElements.get(i);
+            final ModelElement element = originalElements.get(i);
 
             // subtract the provided origin from the element coordinates,
             // makes the origin of the element to be (0, 0, 0)
             final Vector3f from = element.getFrom().sub(origin);
             final Vector3f to = element.getTo().sub(origin);
-            elements[i] = new Cube(
+            elements[i] = new ModelElement(
                     from,
                     to,
-                    new CubeRotation(element.getRotation().getPivot().sub(origin), element.getRotation().getAxis(), element.getRotation().getAngle()),
-                    element.getFaces());
+                    new ElementRotation(element.rotation.angle, element.rotation.axis, element.rotation.getOrigin().sub(origin)),
+                    element.faces);
 
             // calculate the maximum semi length of the model cube
             maxAbsoluteCoordinate = max(
@@ -96,16 +98,15 @@ public class ElementScale {
         // origin of the model is located at (8, 8, 8), just
         // like Minecraft likes.
         for (int i = 0; i < len; ++i) {
-            final Cube element = elements[i];
-            elements[i] = new Cube(
+            final ModelElement element = elements[i];
+            elements[i] = new ModelElement(
                     clampCoordinate(element.getFrom().div(scale).add(MINECRAFT_ORIGIN)),
                     clampCoordinate(element.getTo().div(scale).add(MINECRAFT_ORIGIN)),
-                    new CubeRotation(element
-                            .getRotation()
-                            .getPivot()
+                    new ElementRotation(element.rotation.angle, element.rotation.axis, element.rotation
+                            .getOrigin()
                             .div(scale)
-                            .add(MINECRAFT_ORIGIN), element.getRotation().getAxis(), element.getRotation().getAngle()),
-                    element.getFaces());
+                            .add(MINECRAFT_ORIGIN)),
+                    element.faces);
         }
 
         return new Result(
@@ -127,15 +128,15 @@ public class ElementScale {
     }
 
     public static class Result {
-        private final List<Cube> elements;
+        private final List<ModelElement> elements;
         private final float scale;
 
-        Result(List<Cube> elements, float scale) {
+        Result(List<ModelElement> elements, float scale) {
             this.elements = elements;
             this.scale = scale;
         }
 
-        public List<Cube> elements() {
+        public List<ModelElement> elements() {
             return this.elements;
         }
 

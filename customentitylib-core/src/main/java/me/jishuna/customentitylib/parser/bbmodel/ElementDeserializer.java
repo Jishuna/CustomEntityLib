@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.gson;
+package me.jishuna.customentitylib.parser.bbmodel;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -6,23 +6,23 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import org.joml.Vector3f;
 import me.jishuna.customentitylib.model.Axis;
-import me.jishuna.customentitylib.model.Cube;
-import me.jishuna.customentitylib.model.CubeFace;
-import me.jishuna.customentitylib.model.CubeRotation;
 import me.jishuna.customentitylib.model.Face;
+import me.jishuna.customentitylib.resourcepack.model.ElementRotation;
+import me.jishuna.customentitylib.resourcepack.model.ModelElement;
+import me.jishuna.customentitylib.resourcepack.model.ModelFace;
 
-public class CubeDeserializer implements JsonDeserializer<Cube> {
+public class ElementDeserializer implements JsonDeserializer<ModelElement> {
 
     @Override
-    public Cube deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public ModelElement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         return readCube(json.getAsJsonObject(), context);
     }
 
-    private Cube readCube(JsonObject json, JsonDeserializationContext context) {
+    private ModelElement readCube(JsonObject json, JsonDeserializationContext context) {
         Vector3f from = new Vector3f((float[]) context.deserialize(json.get("from"), float[].class));
         Vector3f to = new Vector3f((float[]) context.deserialize(json.get("to"), float[].class));
         Vector3f pivot = new Vector3f((float[]) context.deserialize(json.get("origin"), float[].class));
@@ -56,17 +56,18 @@ public class CubeDeserializer implements JsonDeserializer<Cube> {
             angle = z;
         }
 
-        CubeRotation rot = new CubeRotation(pivot, axis, angle);
-
-        return new Cube(from, to, rot, readFaces(json.getAsJsonObject("faces"), context));
+        ElementRotation rot = new ElementRotation(angle, axis, pivot);
+        return new ModelElement(from, to, rot, readFaces(json.getAsJsonObject("faces"), context));
     }
 
-    private Map<Face, CubeFace> readFaces(JsonObject json, JsonDeserializationContext context) {
-        Map<Face, CubeFace> faces = new HashMap<>();
+    private Map<Face, ModelFace> readFaces(JsonObject json, JsonDeserializationContext context) {
+        Map<Face, ModelFace> faces = new EnumMap<>(Face.class);
 
         json.asMap().forEach((key, value) -> {
             Face face = Face.valueOf(key.toUpperCase());
-            CubeFace cubeFace = context.deserialize(value, CubeFace.class);
+            ModelFace cubeFace = context.deserialize(value, ModelFace.class);
+            cubeFace.texture = "#" + cubeFace.texture;
+            cubeFace.uv.div(4);
             faces.put(face, cubeFace);
         });
 

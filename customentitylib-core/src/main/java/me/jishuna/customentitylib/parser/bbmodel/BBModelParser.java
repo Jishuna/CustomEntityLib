@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.model;
+package me.jishuna.customentitylib.parser.bbmodel;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,25 +16,28 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
+import me.jishuna.customentitylib.BoneTransformation;
+import me.jishuna.customentitylib.adapter.Vector3fAdapter;
+import me.jishuna.customentitylib.adapter.Vector4fAdapter;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.animation.Animator;
-import me.jishuna.customentitylib.gson.AnimationDeserializer;
-import me.jishuna.customentitylib.gson.AnimatorDeserializer;
-import me.jishuna.customentitylib.gson.CubeDeserializer;
-import me.jishuna.customentitylib.gson.CubeFaceDeserializer;
-import me.jishuna.customentitylib.gson.TextureDeserializer;
+import me.jishuna.customentitylib.model.Bone;
+import me.jishuna.customentitylib.model.ElementScale;
+import me.jishuna.customentitylib.model.EntityModel;
 import me.jishuna.customentitylib.resourcepack.Texture;
-import me.jishuna.customentitylib.test.BoneTransformation;
+import me.jishuna.customentitylib.resourcepack.model.ModelElement;
 
 public class BBModelParser {
-    public static final Gson GSON = new GsonBuilder()
+    private static final Gson GSON = new GsonBuilder()
             .setLenient()
-            .registerTypeAdapter(Cube.class, new CubeDeserializer())
-            .registerTypeAdapter(CubeFace.class, new CubeFaceDeserializer())
+            .setPrettyPrinting()
+            .registerTypeAdapter(Vector3f.class, new Vector3fAdapter())
+            .registerTypeAdapter(Vector4f.class, new Vector4fAdapter())
+            .registerTypeAdapter(ModelElement.class, new ElementDeserializer())
             .registerTypeAdapter(Animation.class, new AnimationDeserializer())
             .registerTypeAdapter(Animator.class, new AnimatorDeserializer())
             .registerTypeAdapter(Texture.class, new TextureDeserializer())
-            .setPrettyPrinting()
             .create();
 
     public static final float DEGREES_TO_RADIANS = (float) (Math.PI / 180f);
@@ -57,7 +60,7 @@ public class BBModelParser {
     }
 
     public EntityModel parse() {
-        Map<UUID, Cube> cubes = new LinkedHashMap<>();
+        Map<UUID, ModelElement> cubes = new LinkedHashMap<>();
         Map<UUID, Bone> bones = new LinkedHashMap<>();
         Map<String, Animation> animations = new LinkedHashMap<>();
         Map<String, Texture> textures = new LinkedHashMap<>();
@@ -66,7 +69,7 @@ public class BBModelParser {
 
         this.root.getAsJsonArray("elements").forEach(entry -> {
             UUID id = GSON.fromJson(entry.getAsJsonObject().get("uuid"), UUID.class);
-            Cube cube = GSON.fromJson(entry, Cube.class);
+            ModelElement cube = GSON.fromJson(entry, ModelElement.class);
 
             cubes.put(id, cube);
         });
@@ -94,14 +97,14 @@ public class BBModelParser {
         return new EntityModel(modelName, bones, animations, textures);
     }
 
-    private Bone readBone(JsonObject json, Map<UUID, Cube> cubes, Vector3f parentTranslation) {
+    private Bone readBone(JsonObject json, Map<UUID, ModelElement> cubes, Vector3f parentTranslation) {
         String name = json.get("name").getAsString();
         UUID id = GSON.fromJson(json.get("uuid"), UUID.class);
         Vector3f origin = new Vector3f(GSON.fromJson(json.get("origin"), float[].class));
         Vector3f absolutePosition = origin.div(-16, 16, -16, new Vector3f());
         Vector3f position = absolutePosition.sub(parentTranslation, new Vector3f());
 
-        List<Cube> boneCubes = new ArrayList<>();
+        List<ModelElement> boneCubes = new ArrayList<>();
         List<Bone> children = new ArrayList<>();
         json.getAsJsonArray("children").forEach(child -> {
             if (child.isJsonObject()) {
@@ -109,7 +112,7 @@ public class BBModelParser {
                 children.add(childBone);
             } else {
                 UUID cubeId = GSON.fromJson(child, UUID.class);
-                Cube cube = cubes.remove(cubeId);
+                ModelElement cube = cubes.remove(cubeId);
                 if (cube == null) {
                     System.out.println("Null!");
                 } else {
@@ -125,6 +128,6 @@ public class BBModelParser {
 
         ElementScale.Result processResult = ElementScale.process(origin, boneCubes);
 
-        return new Bone(id, name, transformation, processResult.elements().toArray(Cube[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
+        return new Bone(id, name, transformation, processResult.elements().toArray(ModelElement[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
     }
 }

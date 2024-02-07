@@ -1,4 +1,4 @@
-package me.jishuna.customentitylib.gson;
+package me.jishuna.customentitylib.parser.bbmodel;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
