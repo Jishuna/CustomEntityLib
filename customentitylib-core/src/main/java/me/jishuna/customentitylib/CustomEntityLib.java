@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import me.jishuna.customentitylib.animation.Priority;
 import me.jishuna.customentitylib.entity.TestModelEntity;
 import me.jishuna.customentitylib.model.EntityModel;
 import me.jishuna.customentitylib.model.ModelManager;
@@ -41,9 +42,12 @@ public class CustomEntityLib extends JavaPlugin {
         }
 
         TestModelEntity entity = new TestModelEntity(player.getLocation(), model);
+        entity.getAnimator().queueAnimation(entity.getAnimation("idle"), Priority.LOWEST);
+
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
             entity.getAnimator().tick();
             entity.getBones().values().forEach(BoneEntity::updateTransformation);
+            entity.getBones().values().forEach(b -> b.setDirty(false));
         }, 0, 1);
 
         return true;

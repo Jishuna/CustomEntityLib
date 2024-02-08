@@ -15,9 +15,15 @@ public interface BoneEntity {
 
     public ItemDisplay getDisplay();
 
-    Matrix4f getAnimationMatrix();
+    public Matrix4f getAnimationMatrix();
 
-    Matrix4f getDefaultMatrix();
+    public Matrix4f getDefaultMatrix();
 
-    Matrix4f getFinalMatrix(boolean head);
+    public Matrix4f getFinalMatrix(boolean head);
+
+    public boolean isDirty();
+
+    public void setDirty(boolean dirty);
+
+    public void addChild(BoneEntity internalBoneEntity);
 }

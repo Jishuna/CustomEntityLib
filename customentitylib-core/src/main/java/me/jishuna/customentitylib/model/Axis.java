@@ -1,5 +1,17 @@
 package me.jishuna.customentitylib.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum Axis {
-    X, Y, Z;
+    @SerializedName("x")
+    X,
+    @SerializedName("y")
+    Y,
+    @SerializedName("z")
+    Z;
+
+    @Override
+    public String toString() {
+        return super.toString().toLowerCase();
+    }
 }

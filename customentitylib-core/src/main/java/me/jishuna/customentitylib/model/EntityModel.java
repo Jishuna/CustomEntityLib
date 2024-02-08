@@ -3,10 +3,12 @@ package me.jishuna.customentitylib.model;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import org.joml.Vector3f;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.resourcepack.ResourcePack;
 import me.jishuna.customentitylib.resourcepack.Texture;
 import me.jishuna.customentitylib.resourcepack.model.ItemModel;
+import me.jishuna.customentitylib.resourcepack.model.ModelDisplay;
 import me.jishuna.customentitylib.resourcepack.model.ModelOverride;
 import me.jishuna.customentitylib.resourcepack.model.ModelPredicate;
 
@@ -29,7 +31,7 @@ public class EntityModel {
 
     private void writeBone(ResourcePack pack, Bone bone) {
         String modelName = this.name.toLowerCase() + "/" + bone.getName().toLowerCase();
-        ItemModel model = pack.getItemModel("test", modelName + ".json", true);
+        ItemModel model = pack.getItemModel("test", modelName + ".json");
         int textureId = 0;
         for (Texture texture : this.textures.values()) {
             pack.writeTexture("test", "models/" + texture.getName(), texture);
@@ -37,8 +39,9 @@ public class EntityModel {
         }
 
         Collections.addAll(model.elements, bone.getCubes());
+        model.display.put("head", new ModelDisplay(new Vector3f(0, 0, 0), new Vector3f(4, 4, 4)));
 
-        pack.getItemModel("minecraft", "item/leather_horse_armor.json", true).overrides
+        pack.getItemModel("minecraft", "item/leather_horse_armor.json").overrides
                 .add(new ModelOverride("test:" + modelName, new ModelPredicate(bone.getCustomModelData())));
 
         for (Bone child : bone.getChildren()) {

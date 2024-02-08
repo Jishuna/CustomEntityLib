@@ -1,6 +1,6 @@
 package me.jishuna.customentitylib.entity;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Color;
@@ -23,7 +23,7 @@ public abstract class ModelEntity {
 
     private final EntityAnimator animator;
     private final EntityModel model;
-    private final Map<UUID, BoneEntity> bones = new HashMap<>();
+    private final Map<UUID, BoneEntity> bones = new LinkedHashMap<>();
 
     private int damageTicks;
 
@@ -97,6 +97,7 @@ public abstract class ModelEntity {
         item.setItemMeta(meta);
         display.setItemStack(item);
         display.setItemDisplayTransform(ItemDisplayTransform.HEAD);
+        display.setRotation(0, 0);
 
         display.setTransformationMatrix(bone.getTransformation().compose());
         display.setTeleportDuration(3);

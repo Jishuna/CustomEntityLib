@@ -11,12 +11,14 @@ public class ItemModel {
     public final Map<String, String> textures;
     public final List<ModelElement> elements;
     public final Set<ModelOverride> overrides;
+    public final Map<String, ModelDisplay> display;
     public String parent;
 
     public ItemModel() {
         this.textures = new LinkedHashMap<>();
         this.elements = new ArrayList<>();
         this.overrides = new TreeSet<>();
+        this.display = new LinkedHashMap<>();
         this.parent = null;
     }
 

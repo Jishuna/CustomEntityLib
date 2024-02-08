@@ -18,21 +18,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import me.jishuna.customentitylib.BoneTransformation;
-import me.jishuna.customentitylib.adapter.Vector3fAdapter;
 import me.jishuna.customentitylib.adapter.Vector4fAdapter;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.animation.Animator;
 import me.jishuna.customentitylib.model.Bone;
-import me.jishuna.customentitylib.model.ElementScale;
 import me.jishuna.customentitylib.model.EntityModel;
 import me.jishuna.customentitylib.resourcepack.Texture;
 import me.jishuna.customentitylib.resourcepack.model.ModelElement;
 
 public class BBModelParser {
-    private static final Gson GSON = new GsonBuilder()
+    public static final Vector3f MINECRAFT_OFFSET = new Vector3f(8);
+
+    static final Gson GSON = new GsonBuilder()
             .setLenient()
             .setPrettyPrinting()
-            .registerTypeAdapter(Vector3f.class, new Vector3fAdapter())
             .registerTypeAdapter(Vector4f.class, new Vector4fAdapter())
             .registerTypeAdapter(ModelElement.class, new ElementDeserializer())
             .registerTypeAdapter(Animation.class, new AnimationDeserializer())
@@ -113,11 +112,8 @@ public class BBModelParser {
             } else {
                 UUID cubeId = GSON.fromJson(child, UUID.class);
                 ModelElement cube = cubes.remove(cubeId);
-                if (cube == null) {
-                    System.out.println("Null!");
-                } else {
-                    boneCubes.add(cube);
-                }
+
+                boneCubes.add(transformElement(origin, cube));
             }
         });
 
@@ -126,8 +122,14 @@ public class BBModelParser {
             transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(-DEGREES_TO_RADIANS, DEGREES_TO_RADIANS, -DEGREES_TO_RADIANS);
         }
 
-        ElementScale.Result processResult = ElementScale.process(origin, boneCubes);
+        return new Bone(id, name, transformation, boneCubes.toArray(ModelElement[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
+    }
 
-        return new Bone(id, name, transformation, processResult.elements().toArray(ModelElement[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
+    private ModelElement transformElement(Vector3f origin, ModelElement element) {
+        element.from.sub(origin).div(4).add(MINECRAFT_OFFSET);
+        element.to.sub(origin).div(4).add(MINECRAFT_OFFSET);
+        element.rotation.origin.sub(origin).div(4).add(MINECRAFT_OFFSET);
+
+        return element;
     }
 }

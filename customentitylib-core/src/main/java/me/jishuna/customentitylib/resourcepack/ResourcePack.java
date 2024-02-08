@@ -30,9 +30,14 @@ public class ResourcePack {
         this.source = source;
     }
 
-    public static ResourcePack fromFile(File file) {
+    public static ResourcePack fromFile(File file, boolean delete) {
         Path path = file.toPath();
+
         try {
+            if (delete) {
+                Files.deleteIfExists(path);
+            }
+
             URI uri = path.toUri();
             URI zipUri = new URI("jar:" + uri.getScheme(), uri.getPath(), null);
             FileSystem system = FileSystems.newFileSystem(zipUri, Map.of("create", "true"));
@@ -81,10 +86,10 @@ public class ResourcePack {
         return null;
     }
 
-    public ItemModel getItemModel(String namespace, String name, boolean create) {
+    public ItemModel getItemModel(String namespace, String name) {
         Path path = this.source.getPath(ASSETS_PATH, namespace, MODELS_PATH, name);
 
-        Object existing = this.modified.computeIfAbsent(path, k -> getAs(path, ItemModel.class, () -> create ? new ItemModel() : null));
+        Object existing = this.modified.computeIfAbsent(path, k -> getAs(path, ItemModel.class, ItemModel::new));
         if (existing instanceof ItemModel model) {
             return model;
         }

@@ -81,6 +81,14 @@ public class CustomEntity extends PathfinderMob {
         this.modelEntity.tick();
         boolean walking = updateWalking();
 
+        if (getYRot() != this.yRotO) {
+            getPassengers().forEach(e -> {
+                if (e instanceof InternalBoneEntity bone) {
+                    bone.setDirty(true);
+                }
+            });
+        }
+
         ServerLevel level = ((ServerLevel) level());
         @SuppressWarnings("resource")
         TrackedEntity tracked = level.getChunkSource().chunkMap.entityMap.get(getId());
