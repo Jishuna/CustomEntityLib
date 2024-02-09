@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import me.jishuna.customentitylib.BoneTransformation;
 import me.jishuna.customentitylib.adapter.Vector4fAdapter;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.animation.Animator;
@@ -117,12 +117,17 @@ public class BBModelParser {
             }
         });
 
-        BoneTransformation transformation = new BoneTransformation(position, new Vector3f(), new Vector3f(1));
+        Matrix4f matrix = new Matrix4f();
+        matrix.setTranslation(position);
         if (json.has("rotation")) {
-            transformation.rotation.set(GSON.fromJson(json.get("rotation"), float[].class)).mul(-DEGREES_TO_RADIANS, DEGREES_TO_RADIANS, -DEGREES_TO_RADIANS);
+            float[] rotation = GSON.fromJson(json.get("rotation"), float[].class);
+            matrix
+                    .setRotationZYX(org.joml.Math.toRadians(-rotation[2]),
+                            org.joml.Math.toRadians(rotation[1]),
+                            org.joml.Math.toRadians(-rotation[0]));
         }
 
-        return new Bone(id, name, transformation, boneCubes.toArray(ModelElement[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
+        return new Bone(id, name, matrix, boneCubes.toArray(ModelElement[]::new), children.toArray(Bone[]::new), MODEL_DATA_COUNTER.getAndIncrement());
     }
 
     private ModelElement transformElement(Vector3f origin, ModelElement element) {

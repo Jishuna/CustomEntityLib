@@ -1,6 +1,6 @@
 package me.jishuna.customentitylib.animation;
 
-import me.jishuna.customentitylib.nms.BoneEntity;
+import me.jishuna.customentitylib.entity.BoneEntity;
 
 public class Animator {
     private final AnimationChannel position;
@@ -20,7 +20,6 @@ public class Animator {
     public void tick(BoneEntity bone, int frame) {
         bone.setTranslation(this.position.tick(bone, frame));
         bone.setRotation(this.rotation.tick(bone, frame));
-        bone.setScale(this.scale.tick(bone, frame));
     }
 
     public AnimationChannel getPosition() {

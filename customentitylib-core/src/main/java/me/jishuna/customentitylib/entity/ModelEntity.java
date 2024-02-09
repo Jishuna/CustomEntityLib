@@ -1,7 +1,9 @@
 package me.jishuna.customentitylib.entity;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -11,11 +13,12 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.joml.Math;
+import org.joml.Matrix4f;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.animation.Priority;
 import me.jishuna.customentitylib.model.Bone;
 import me.jishuna.customentitylib.model.EntityModel;
-import me.jishuna.customentitylib.nms.BoneEntity;
 import me.jishuna.customentitylib.nms.NMS;
 
 public abstract class ModelEntity {
@@ -23,6 +26,8 @@ public abstract class ModelEntity {
 
     private final EntityAnimator animator;
     private final EntityModel model;
+    private final Entity parentEntity;
+    private final Set<BoneEntity> parentBones = new HashSet<>();
     private final Map<UUID, BoneEntity> bones = new LinkedHashMap<>();
 
     private int damageTicks;
@@ -31,8 +36,8 @@ public abstract class ModelEntity {
         this.model = model;
         this.animator = new EntityAnimator(this);
 
-        Entity parent = NMS.getAdapter().spawnCustomEntity(location, this);
-        createBoneEntities(location, parent);
+        this.parentEntity = NMS.getAdapter().spawnCustomEntity(location, this);
+        createBoneEntities(location, this.parentEntity);
     }
 
     public EntityAnimator getAnimator() {
@@ -47,6 +52,14 @@ public abstract class ModelEntity {
         if ((this.damageTicks > 0) && (--this.damageTicks <= 0)) {
             setColor(Color.WHITE, -1);
         }
+    }
+
+    public void asyncTick() {
+        this.animator.tick();
+        Matrix4f matrix = new Matrix4f();
+        matrix.setRotationXYZ(0, -Math.toRadians(this.parentEntity.getLocation().getYaw()), 0);
+
+        this.parentBones.forEach(bone -> bone.updateTransform(matrix));
     }
 
     public void onDeath() {
@@ -87,26 +100,31 @@ public abstract class ModelEntity {
             return;
         }
 
-        BoneEntity entity = NMS.getAdapter().spawnBoneEntity(parent, location, bone.getTransformation(), parentBone, bone.getName().startsWith("h_"));
-        ItemDisplay display = entity.getDisplay();
+        ItemDisplay display = location.getWorld().spawn(location, ItemDisplay.class, e -> {
+            ItemStack item = new ItemStack(Material.LEATHER_HORSE_ARMOR);
+            LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+            meta.setCustomModelData(bone.getCustomModelData());
+            meta.setColor(Color.WHITE);
+            item.setItemMeta(meta);
+            e.setItemStack(item);
+            e.setItemDisplayTransform(ItemDisplayTransform.HEAD);
 
-        ItemStack item = new ItemStack(Material.LEATHER_HORSE_ARMOR);
-        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-        meta.setCustomModelData(bone.getCustomModelData());
-        meta.setColor(Color.WHITE);
-        item.setItemMeta(meta);
-        display.setItemStack(item);
-        display.setItemDisplayTransform(ItemDisplayTransform.HEAD);
-        display.setRotation(0, 0);
-
-        display.setTransformationMatrix(bone.getTransformation().compose());
-        display.setTeleportDuration(3);
+            e.setTeleportDuration(3);
+        });
 
         parent.addPassenger(display);
-        this.bones.put(bone.getId(), entity);
+
+        BoneEntity boneEntity = new BoneEntity(bone, display);
+        this.bones.put(bone.getId(), boneEntity);
+
+        if (parentBone != null) {
+            parentBone.addChild(boneEntity);
+        } else {
+            this.parentBones.add(boneEntity);
+        }
 
         for (Bone childBone : bone.getChildren()) {
-            createBoneEntitiesRecursive(location, childBone, parent, entity);
+            createBoneEntitiesRecursive(location, childBone, parent, boneEntity);
         }
     }
 }

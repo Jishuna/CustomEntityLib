@@ -2,6 +2,7 @@ package me.jishuna.customentitylib.entity;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import me.jishuna.customentitylib.animation.Animation;
 import me.jishuna.customentitylib.animation.AnimationEntry;
 import me.jishuna.customentitylib.animation.LoopMode;
@@ -12,7 +13,7 @@ public class EntityAnimator {
     private final Queue<AnimationEntry> animationQueue = new ConcurrentLinkedQueue<>();
 
     private volatile AnimationEntry currentAnimation;
-    private int frame;
+    private final AtomicInteger frame = new AtomicInteger();
 
     public EntityAnimator(ModelEntity entity) {
         this.entity = entity;
@@ -24,23 +25,20 @@ public class EntityAnimator {
         }
 
         Animation active = this.currentAnimation.animation();
+        int currentFrame = this.frame.incrementAndGet();
 
-        this.frame++;
-        if (this.frame > active.getLength()) {
+        if (currentFrame >= active.getLength()) {
             if (!this.animationQueue.isEmpty() && this.animationQueue.peek().priority().getValue() >= this.currentAnimation.priority().getValue()) {
                 clearActiveAnimation();
             } else if (active.getLoopMode() == LoopMode.LOOP) {
-                queueAnimation(this.currentAnimation);
+                currentFrame = 0;
+                this.frame.set(0);
             } else {
                 clearActiveAnimation();
             }
         }
 
-        if (!hasActiveAnimation()) {
-            return;
-        }
-
-        active.tick(this.entity, this.frame);
+        active.tick(this.entity, currentFrame);
     }
 
     public void queueAnimation(Animation animation, Priority priority) {
@@ -69,7 +67,7 @@ public class EntityAnimator {
         } else {
             this.currentAnimation = null;
         }
-        this.frame = 0;
+        this.frame.set(0);
     }
 
     public void clearAll() {

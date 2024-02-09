@@ -2,8 +2,8 @@ package me.jishuna.customentitylib.animation;
 
 import java.util.Map;
 import java.util.UUID;
+import me.jishuna.customentitylib.entity.BoneEntity;
 import me.jishuna.customentitylib.entity.ModelEntity;
-import me.jishuna.customentitylib.nms.BoneEntity;
 
 public class Animation {
     private final Map<UUID, Animator> animators;
